@@ -2,7 +2,7 @@ import subprocess
 import sys
 import os
 
-OUTPUT_DIR = "/Users/mokrzesik/Desktop/Michael/Music/Youtube"
+OUTPUT_DIR = "/Users/mokrzesik/Desktop/Michael/Music/Youtube/Marching Illini"
 
 def prompt_rename(original_title):
     print(f'\n🎬 Current video title: "{original_title}"')
