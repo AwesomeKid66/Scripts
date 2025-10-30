@@ -80,6 +80,11 @@ def process_video(url):
     if not try_direct_m4a(url):
         fallback_download_and_convert(url)
 
+def update_yt_dlp():
+    print("🔄 Updating yt-dlp to the latest version...")
+    subprocess.run(["yt-dlp", "-U"], check=True)
+    print("✅ yt-dlp updated.")
+
 def main():
     if len(sys.argv) < 2:
         print("Usage: uv run download_playlist.py [YouTube_URL]")
@@ -87,6 +92,7 @@ def main():
 
     os.makedirs(OUTPUT_DIR, exist_ok=True)
     url = sys.argv[1]
+    update_yt_dlp()
 
     if "playlist?" in url:
         print("🎧 Playlist detected. Processing all videos...")

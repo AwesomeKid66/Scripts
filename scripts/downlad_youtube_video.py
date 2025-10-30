@@ -30,6 +30,11 @@ def download_video(url, final_filename):
 
     print(f"✅ Done! Video saved to: {output_path}")
 
+def update_yt_dlp():
+    print("🔄 Updating yt-dlp to the latest version...")
+    subprocess.run(["yt-dlp", "-U"], check=True)
+    print("✅ yt-dlp updated.")
+
 def main():
     if len(sys.argv) < 2:
         print("Usage: uv run download_video.py [YouTube_URL]")
@@ -37,6 +42,7 @@ def main():
 
     url = sys.argv[1]
     os.makedirs(OUTPUT_DIR, exist_ok=True)
+    update_yt_dlp()
 
     try:
         title = get_video_title(url)

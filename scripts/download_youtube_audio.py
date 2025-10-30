@@ -65,6 +65,11 @@ def fallback_download_and_convert(url):
     shutil.rmtree(TEMP_DIR, ignore_errors=True)
     print(f"✅ Done! Saved to: {output_file}")
 
+def update_yt_dlp():
+    print("🔄 Updating yt-dlp to the latest version...")
+    subprocess.run(["yt-dlp", "-U"], check=True)
+    print("✅ yt-dlp updated.")
+
 def main():
     if len(sys.argv) < 2:
         print("Usage: uv run script.py [YouTube_URL]")
@@ -72,6 +77,7 @@ def main():
 
     os.makedirs(OUTPUT_DIR, exist_ok=True)
     url = sys.argv[1]
+    update_yt_dlp()
 
     if not try_direct_m4a(url):
         fallback_download_and_convert(url)
