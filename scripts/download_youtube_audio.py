@@ -5,7 +5,7 @@ import glob
 import shutil
 import argparse
 
-OUTPUT_DIR = "/Users/mokrzesik/Desktop/Michael/Music/Youtube"
+OUTPUT_DIR = "/Users/mokrzesik/Desktop/Michael/Music/Youtube/Marching Illini"
 TEMP_DIR = os.path.join(os.getcwd(), "yt_temp")
 
 def prompt_rename(original_title: str) -> str:
