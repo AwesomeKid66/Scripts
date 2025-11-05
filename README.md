@@ -1,40 +1,235 @@
-# 🧰 Utility Script Collection
+# Utility Scripts Collection
 
-A personal toolkit of **PowerShell** and **Python** scripts for automating common tasks — including managing iPhone photo folders, organizing media, and downloading YouTube videos and audio.
+A collection of PowerShell and Python scripts for managing media files, downloading YouTube content, and system configuration.
 
----
+## Table of Contents
 
-## 📁 Contents
-
-| Script | Language | Description |
-|--------|-----------|-------------|
-| `rename_iphone_folders.ps1` | PowerShell | Consolidates and renames iPhone photo folders by year and month. |
-| `sort_iphone_photos_videos.ps1` | PowerShell | Separates iPhone photos and videos into dedicated folders. |
-| `disable-wake.ps1` | PowerShell | Disables all wake-enabled devices except the power button. |
-| `download_video.py` | Python | Downloads a single YouTube video as `.mp4`. |
-| `download_audio.py` | Python | Downloads or converts a single YouTube video into `.m4a` audio. |
-| `download_playlist.py` | Python | Downloads all videos from a YouTube playlist as `.m4a` audio files. |
+- [PowerShell Scripts](#powershell-scripts)
+  - [iPhone Photo Folder Converter](#iphone-photo-folder-converter)
+  - [Photo/Video Splitter](#photovideo-splitter)
+  - [Disable Wake Devices](#disable-wake-devices)
+- [Python Scripts](#python-scripts)
+  - [YouTube Audio Downloader](#youtube-audio-downloader)
+  - [YouTube Playlist Downloader](#youtube-playlist-downloader)
+  - [YouTube Video Downloader](#youtube-video-downloader)
 
 ---
 
-## ⚡ PowerShell Scripts
+## PowerShell Scripts
 
-### 🗂️ 1. `rename_iphone_folders.ps1`
+### iPhone Photo Folder Converter
 
-**Purpose:**
-Consolidates iPhone backup folders into cleanly named `yyyy-mm` folders and merges all files accordingly.
+**File:** `convert_iphone_folders_naming.ps1`
 
-**Behavior:**
-- Scans the specified root directory for folders matching `yyyymm_` or `yyyymm__a` patterns.
-- Renames them into `yyyy-mm` format (e.g., `202312__a` → `2023-12`).
-- Moves all contained files into the new folder.
-- Automatically appends `_1`, `_2`, etc., to duplicate filenames.
-- Deletes old folders once files have been moved.
+Consolidates and renames iPhone photo folders from the format `yyyymm_` (with optional letter suffix) to `yyyy-mm`.
+
+**Features:**
+- Converts folder names from `202301_`, `202301a`, `202301_a` → `2023-01`
+- Merges files from multiple source folders into consolidated month folders
+- Handles duplicate filenames by appending numbers
+- Removes empty source folders after migration
 
 **Usage:**
 ```powershell
-# Edit the root folder path at the top of the script:
+# Edit the script to set your root folder path
 $rootFolder = "D:\Pictures\IPhone pictures"
 
-# Then run:
-.\rename_iphone_folders.ps1
+# Run the script
+.\convert_iphone_folders_naming.ps1
+```
+
+---
+
+### Photo/Video Splitter
+
+**File:** `split_photo_video.ps1`
+
+Organizes mixed media files by separating photos and videos into different directory structures while maintaining month-based organization.
+
+**Features:**
+- Separates photos and videos from mixed folders
+- Maintains `yyyy-mm` folder structure in both destinations
+- Deletes `.aae` (Apple metadata) files automatically
+- Removes empty source folders after processing
+
+**Supported Formats:**
+- **Photos:** `.jpg`, `.jpeg`, `.png`, `.heic`, `.bmp`, `.gif`, `.tiff`, `.webp`, `.dng`
+- **Videos:** `.mp4`, `.mov`, `.avi`, `.mkv`, `.wmv`, `.flv`
+
+**Usage:**
+```powershell
+# Edit the script to set your paths
+$rootFolder = "D:\Pictures\IPhone pictures RAW name"
+$photoDest = "D:\Pictures\IPhone pictures"
+$videoDest = "D:\Pictures\IPhone videos"
+
+# Run the script
+.\split_photo_video.ps1
+```
+
+---
+
+### Disable Wake Devices
+
+**File:** `remove_power_awake_devices.ps1`
+
+Disables all devices that can wake your computer from sleep, except the power button.
+
+**Features:**
+- Self-elevates to administrator privileges
+- Lists all wake-enabled devices before disabling
+- Keeps PowerShell window open to show results
+- Useful for preventing accidental wake from mouse/keyboard
+
+**Usage:**
+```powershell
+# Simply run the script - it will request admin privileges automatically
+.\remove_power_awake_devices.ps1
+```
+
+---
+
+## Python Scripts
+
+### Prerequisites
+
+All Python scripts require:
+- Python 3.7+
+- `yt-dlp` installed (`pip install yt-dlp`)
+- `ffmpeg` installed and in system PATH
+
+### YouTube Audio Downloader
+
+**File:** `download_youtube_audio.py`
+
+Downloads audio from a single YouTube video in MP3 or M4A format.
+
+**Features:**
+- Downloads audio at 192kbps quality
+- Interactive filename renaming
+- Automatic yt-dlp updates before download
+- Fallback conversion using ffmpeg if direct download fails
+
+**Usage:**
+```bash
+# Download as MP3
+./download_youtube_audio.py -mp3 "https://www.youtube.com/watch?v=VIDEO_ID"
+
+# Download as M4A
+./download_youtube_audio.py -m4a "https://www.youtube.com/watch?v=VIDEO_ID"
+```
+
+**Default Output Location:**
+```
+/Users/mokrzesik/Desktop/Michael/Music/Youtube/Marching Illini
+```
+
+Edit the `OUTPUT_DIR` variable in the script to change the destination.
+
+---
+
+### YouTube Playlist Downloader
+
+**File:** `download_youtube_playlist.py`
+
+Downloads audio from entire YouTube playlists or individual videos.
+
+**Features:**
+- Processes entire playlists automatically
+- Works with single videos too
+- Interactive renaming for each track
+- Custom output directory support
+- Continues on error (won't stop if one video fails)
+
+**Usage:**
+```bash
+# Download playlist as MP3
+./download_youtube_playlist.py -mp3 "https://www.youtube.com/playlist?list=PLAYLIST_ID"
+
+# Download playlist as M4A with custom output
+./download_youtube_playlist.py -m4a "PLAYLIST_URL" --output-dir "/path/to/folder"
+
+# Works with single videos too
+./download_youtube_playlist.py -mp3 "https://www.youtube.com/watch?v=VIDEO_ID"
+```
+
+**Default Output Location:**
+```
+/Users/mokrzesik/Desktop/Michael/Music/Youtube
+```
+
+---
+
+### YouTube Video Downloader
+
+**File:** `download_youtube_video.py`
+
+Downloads YouTube videos with various format and quality options.
+
+**Features:**
+- Multiple container formats: MP4, WEBM, MKV
+- Quality control with `--max-height` option
+- Interactive title renaming
+- Automatic stream merging (video + audio)
+
+**Formats:**
+- **MP4:** H.264 video + AAC audio
+- **WEBM:** VP9 video + Opus audio
+- **MKV:** Any available codecs (most flexible)
+
+**Usage:**
+```bash
+# Download as MP4
+./download_youtube_video.py -mp4 "https://www.youtube.com/watch?v=VIDEO_ID"
+
+# Download as WEBM with max 1080p quality
+./download_youtube_video.py -webm "VIDEO_URL" --max-height 1080
+
+# Download as MKV with custom output directory
+./download_youtube_video.py -mkv "VIDEO_URL" --output-dir "/path/to/videos"
+
+# Limit to 720p
+./download_youtube_video.py -mp4 "VIDEO_URL" --max-height 720
+```
+
+**Default Output Location:**
+```
+/Users/mokrzesik/Desktop/Michael/Music/Youtube/Videos/Marching Illini
+```
+
+---
+
+## Installation
+
+### PowerShell Scripts
+
+1. Clone this repository
+2. Edit file paths in scripts to match your system
+3. Run scripts in PowerShell (some may require administrator privileges)
+
+### Python Scripts
+
+1. Clone this repository
+2. Install dependencies:
+```bash
+   pip install yt-dlp
+```
+3. Install ffmpeg:
+   - **macOS:** `brew install ffmpeg`
+   - **Linux:** `sudo apt install ffmpeg`
+   - **Windows:** Download from [ffmpeg.org](https://ffmpeg.org)
+4. Make scripts executable (Unix-based systems):
+```bash
+   chmod +x *.py
+```
+5. Edit `OUTPUT_DIR` variables in scripts to match your desired locations
+
+---
+
+## License
+
+These scripts are provided as-is for personal use. Feel free to modify and distribute.
+
+## Contributing
+
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
