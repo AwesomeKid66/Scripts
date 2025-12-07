@@ -115,7 +115,7 @@ def fallback_download_and_convert(url: str, audio_format: str) -> None:
 
 def update_yt_dlp():
     print("🔄 Updating yt-dlp to the latest version...")
-    subprocess.run(["yt-dlp", "-U"], check=True)
+    subprocess.run(["brew", "upgrade", "yt-dlp"], check=True)
     print("✅ yt-dlp updated.")
 
 def parse_args():

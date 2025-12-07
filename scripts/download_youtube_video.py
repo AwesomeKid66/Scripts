@@ -65,7 +65,7 @@ def download_video(url: str, final_filename: str, fmt: str, max_height: int | No
 def update_yt_dlp():
     """Ensure yt-dlp is current."""
     print("🔄 Updating yt-dlp to the latest version...")
-    subprocess.run(["yt-dlp", "-U"], check=True)
+    subprocess.run(["brew", "upgrade", "yt-dlp"], check=True)
     print("✅ yt-dlp updated.")
 
 def parse_args():

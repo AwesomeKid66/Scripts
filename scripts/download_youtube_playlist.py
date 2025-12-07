@@ -125,7 +125,7 @@ def process_video(url: str, audio_format: str, output_dir: str):
 
 def update_yt_dlp():
     print("🔄 Updating yt-dlp to the latest version...")
-    subprocess.run(["yt-dlp", "-U"], check=True)
+    subprocess.run(["brew", "upgrade", "yt-dlp"], check=True)
     print("✅ yt-dlp updated.")
 
 def parse_args():
